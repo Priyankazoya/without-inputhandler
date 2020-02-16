@@ -17,7 +17,7 @@ from selenium.webdriver.common.by import By
 
 
 # initializing logging file
-logging.basicConfig(format='%(asctime)s: %(levelname)s:%(message)s', filename='amazon.log', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s: %(levelname)s:%(message)s', filename='flipkart.log', level=logging.INFO)
 
 # setting options for chrome driver
 options = Options()
@@ -35,7 +35,7 @@ def info(msg1='',msg2='',msg3=''):
     
     
 
-info("<amazon>  trying to connecting to url", ' at ',time.ctime())
+info("<flipkart>  trying to connecting to url", ' at ',time.ctime())
 
 driver = webdriver.Chrome(chrome_options=options)
      
@@ -70,36 +70,39 @@ for j in range(looping):
         
         
         time.sleep(1)
+        try:
+            element=driver.find_element_by_xpath(header.format(i))
+            print(element.text)
+            h.append(element.text)
+           
+            
+            element=driver.find_element_by_xpath(rating.format(i))
+            #print(element.get_attribute('innerHTML'))
+            print(element.get_attribute('innerHTML').split('<')[0])
+            r.append(element.get_attribute)
+            
+            
+            element=driver.find_element_by_xpath(price.format(i))
+            print(element.text)
+            p.append(element.text)
+        except Exception as e:
+            break
+    try: 
+        page_xpath ="//span[contains(text(),'Next')]"
+        controlClick=driver.find_element_by_xpath(page_xpath)
         
-        element=driver.find_element_by_xpath(header.format(i))
-        print(element.text)
-        h.append(element.text)
-       
-        
-        element=driver.find_element_by_xpath(rating.format(i))
-        #print(element.get_attribute('innerHTML'))
-        print(element.get_attribute('innerHTML').split('<')[0])
-        r.append(element.get_attribute)
-        
-        
-        element=driver.find_element_by_xpath(price.format(i))
-        print(element.text)
-        p.append(element.text)
-    
-  
-    page_xpath ="//span[contains(text(),'Next')]"
-    controlClick=driver.find_element_by_xpath(page_xpath)
-    
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, page_xpath)))
-    controlClick.click()
- 
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, page_xpath)))
+        controlClick.click()
+    except Exception as e:
+        driver.close()
+        break
 
 
     
 df=pd.DataFrame({'header':h,'rating':r,'price':p})
 
 
-df
+print(df)
 
 
 
