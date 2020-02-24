@@ -10,9 +10,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import logging
 import time
-# import pandas as pd
-
-
+import Inputhandler
+import pandas as pd
 
 
 
@@ -42,28 +41,43 @@ driver.get(url)
 # time.sleep(5)
 # driver.close()
 
-# h=[]
-# r=[]
-# p=[]
-
-
+h=[]
+r=[]
+p=[]
 
 
 header = "//span[@id='productTitle']"
 rating = "(//span[@id='productTitle']//following::span[@class='a-icon-alt'])[1]"
 price = "//span[@id='priceblock_ourprice']"
 
-element=driver.find_element_by_xpath(header)
-print(element.text)
 
 
-element=driver.find_element_by_xpath(rating)
-print(element.get_attribute('innerHTML'))
+element = header
+print(Inputhandler.readText(driver,element)) 
+h.append(Inputhandler.readText(driver,element))      
+element = rating
+print(Inputhandler.getAttribute(driver,element,"innerHTML"))
+r.append(Inputhandler.readText(driver,element))
+element = price
+print(Inputhandler.readText(driver,element))
+r.append(Inputhandler.readText(driver,element))
+
+df=pd.DataFrame({'header':h,'rating':r,'price':p})
+df
 
 
-element=driver.find_element_by_xpath(price)
-print(element.text)
+# element=driver.find_element_by_xpath(header)
+# print(element.text)
+# h.append(element)
 
+
+# element=driver.find_element_by_xpath(rating)
+# print(element.get_attribute('innerHTML'))
+# r.append(element)
+
+# element=driver.find_element_by_xpath(price)
+# print(element.text)
+# p.append(element)
 
 
 # df=pd.DataFrame({'header':h,'rating':r,'price':p})
